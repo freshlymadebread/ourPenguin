@@ -1,0 +1,16 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="progress-box">
+    <progress percent="{{ (lifeTime/30000) * 100 }}" color="#10AEFF"  stroke-width="3" />
+  </view>
+  <view class="penguin-info">
+    <text class="life-motto">企鹅的存活时间：{{lifeTime}}ms</text>
+  </view>
+  <view class="userinfo">
+      <image bindtap="eat" class="userinfo-avatar" src="./penguin.jpg" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}的企鹅</text>
+  </view>
+   <view class="food" animation="{{ani}}">
+      <image bindtap="eat" class="userinfo-avatar" src="./penguin.jpg" mode="cover"></image>
+  </view>
+</view>
