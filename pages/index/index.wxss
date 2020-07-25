@@ -1,4 +1,12 @@
 /**index.wxss**/
+page{
+  height: 100%;
+}
+.container{
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -32,5 +40,34 @@
 }
 .food{
   position: absolute;
-  bottom: -50%;
+  top: -20%;
+}
+.mark{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  opacity: 0.9;
+}
+.button{
+  border-radius: 50px;
+}
+.food-ani{
+  animation: feed 1s infinite;
+}
+@keyframes feed{
+  0%{top:-20%}
+  100%{
+    top:50%;
+    opacity: 0;
+  }             
+}
+.log{
+  height: 400rpx;
+  overflow: auto;
 }
