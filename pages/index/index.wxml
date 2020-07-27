@@ -1,22 +1,35 @@
 <!--index.wxml-->
-<view class="container">
+<view>
   <view class="mark" wx:if="{{!hasUserInfo && canIUse}}">
       <button class='button' wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
   </view>
-  <view class="progress-box">
-    <progress percent="{{ (lifeTime/7200) * 100 }}" color="#10AEFF"  stroke-width="3" />
+  <view  wx:if="{{userInfo.nickName}}"  class="container">
+    <view class="progress-box">
+      <progress percent="{{ (lifeTime/7200) * 100 }}" color="#10AEFF"  stroke-width="3" />
+    </view>
+    <view class="penguin-info">
+      <text class="life-motto" wx:if="{{lifeTime == 0}}">我们的企鹅被饿死了！</text>
+      <text class="life-motto" wx:else>我们的企鹅存活时间：{{lifeTime}}/7200</text>
+    </view>
+    <view class="userinfo">
+        <image bindtap="eat" class="userinfo-avatar" src="./penguin.jpg" mode="cover"></image>
+        <text class="userinfo-nickname">我们的企鹅</text>
+    </view>
+    <view class="log">
+    <swiper class='swiper-container' previous-margin='51px' next-margin='60px' indicator-dots="{{indicatorDots}}" autoplay="true" interval="2000" duration="500" vertical='true'>
+      <block wx:for="{{logs}}" wx:key="*this">
+        <swiper-item>
+          <view class="swiper-item">
+            <text class="log-item" >
+            来自 {{item.nick_name}} 的暴击喂养：生命值 {{item.life}} 
+            </text></view>
+        </swiper-item>
+      </block>
+    </swiper>
+    </view>
   </view>
-  <view class="penguin-info">
-    <text class="life-motto">我们的企鹅存活时间：{{lifeTime}}s</text>
-  </view>
-  <view class="userinfo">
-      <image bindtap="eat" class="userinfo-avatar" src="./penguin.jpg" mode="cover"></image>
-      <text class="userinfo-nickname">我们的企鹅</text>
-  </view>
-  <view class="log">
-      <text class="log-item" wx:for="{{logs}}">
-      来自 {{item.nick_name}} 的暴击喂养：生命值 {{item.life}} 
-      </text>
+  <view wx:else>
+    请授权后，再来看看！
   </view>
    <view class="{{'food ' + (ani && 'food-ani')}}" >
       <image bindtap="eat" class="userinfo-avatar" src="./penguin.jpg" mode="cover"></image>

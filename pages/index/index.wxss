@@ -71,3 +71,6 @@ page{
   height: 400rpx;
   overflow: auto;
 }
+.swiper-container{
+  width: 300px
+}

@@ -37,7 +37,6 @@ Page({
         url: `penguin/feed`,
         method: 'POST',
         success: res=>{
-          console.log(res.data.data)
           if(res.data.data.code === 1){
             wx.showToast({
               title: '企鹅死了!',
@@ -65,24 +64,14 @@ Page({
     })
   },
   onLoad: function () {
-    let ws = wx.connectSocket({
-      url: 'ws://47.100.98.138/v1/ws',
-    })
-    ws.onOpen(()=>{ console.log('链接成功res！') });
-    ws.onMessage((res) => {
-      let data = JSON.parse(res.data)
-      this.setData({
-        lifeTime: data.penguin_life,
-        penguinName: 'lfl的企鹅',
-      })
-    })
-    console.log(app.globalData)
+    this.connectMySocket()
     // 获取用户userid
     new Promise((resolve,reject) => {
-      if (app.globalData.userInfo) {
+      let userInfoStroge = wx.getStorageSync('userInfo')
+      if (userInfoStroge) {
         console.log('存在userinfo')
         this.setData({
-          userInfo: app.globalData.userInfo,
+          userInfo: userInfoStroge,
           hasUserInfo: true
         })
         resolve()
@@ -100,28 +89,45 @@ Page({
         // 在没有 open-type=getUserInfo 版本的兼容处理
         wx.getUserInfo({
           success: res => {
-            app.globalData.userInfo = res.userInfo
+            console.log('通过index 设置了userinfo')
+            wx.setStorageSync('userInfo',res.userInfo)
             this.setData({
               userInfo: res.userInfo,
               hasUserInfo: true
             })
             resolve()
+          },
+          fail: (error) =>{
+            console.log(error)
           }
         })
       }
     }).then(_=> {
-      console.log(22222222222222222222222)
-      console.log(this.data.userInfo.nickName)
+      console.log('通过index请求token')
       app.getToken()
     })
   },
-  // 获取用户信息
+  // 获取用户信息_ 点击获取用户信息时触发
   getUserInfo: function(e) {
-    console.log('getUserInfo')
-    app.globalData.userInfo = e.detail.userInfo
+    console.log(e)
+    wx.setStorageSync('userInfo', e.detail.userInfo)
     this.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
+    })
+    app.getToken()
+  },
+  connectMySocket(){
+    let ws = wx.connectSocket({
+      url: 'ws://47.100.98.138/v1/ws',
+    })
+    ws.onOpen(()=>{ console.log('链接成功res！') });
+    ws.onMessage((res) => {
+      let data = JSON.parse(res.data)
+      this.setData({
+        lifeTime: data.penguin_life,
+        penguinName: 'lfl的企鹅',
+      })
     })
   },
   onShareAppMessage: function( options ){
@@ -146,7 +152,6 @@ Page({
     　　// 来自页面内的按钮的转发
     　　if( options.from == 'button' ){
     　　　　var eData = options.target.dataset;
-    　　　　console.log( eData.name );     // shareBtn
     　　　　// 此处可以修改 shareObj 中的内容
     　　　　shareObj.path = '/pages/btnname/btnname?btn_name='+eData.name;
     　　}
